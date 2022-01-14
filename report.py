@@ -413,7 +413,7 @@ class s_PDF(FPDF):
         self.ln(4)
 
     def chapter_body(self, school, grade, year, term):
-        cn = pymysql.connect(host='10.1.1.2', user='root', password='Start@123', db='axium')
+        cn = pymysql.connect(host='10.1.1.2', user='root', password='<fill here>', db='axium')
 
         # Grab ekuk attendance
         ekuk_aten = pd.read_sql("SELECT students.student_id as student_id, students. firstname, students.lastname, round((count(IF(attended = 1, true, NULL)) / count(*))*100, 2) as percentageAttended, round((count(IF(attended = 2, true, NULL)) / count(*))*100,2) as percentageExcused, round((count(IF(attended = 0, true, NULL)) / count(*))*100,2) as percentageNotAttended FROM attendance JOIN enrollment ON attendance.student_id = enrollment.student_id JOIN classes ON attendance.class_id = classes.class_id JOIN students ON attendance.student_id = students.student_id WHERE EXTRACT(YEAR FROM classes.date) = '{}'  AND  enrollment.program = 'Ekukhuleni' AND classes.class_type = 'Saturdays' AND enrollment.end is NULL AND students.current_school = '{}' AND students.current_grade = {} GROUP BY students.student_id ORDER BY students.lastname;".format(year, school, grade), con=cn)
