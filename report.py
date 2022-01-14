@@ -143,7 +143,7 @@ class i_PDF(FPDF):
     def chapter_body(self, school, grade, year, term):
 
         # Connect to server
-        cn = pymysql.connect(host='10.1.1.2', user='root', password='Start@123', db='axium')
+        cn = pymysql.connect(host='10.1.1.2', user='root', password='<Insert>', db='axium')
 
         # Grab ekuk attendance
         ekuk_aten = pd.read_sql("SELECT students.student_id as student_id, students. firstname, students.lastname, round((count(IF(attended = 1, true, NULL)) / count(*))*100, 2) as percentageAttended, round((count(IF(attended = 2, true, NULL)) / count(*))*100,2) as percentageExcused, round((count(IF(attended = 0, true, NULL)) / count(*))*100,2) as percentageNotAttended FROM attendance JOIN enrollment ON attendance.student_id = enrollment.student_id JOIN classes ON attendance.class_id = classes.class_id JOIN students ON attendance.student_id = students.student_id WHERE EXTRACT(YEAR FROM classes.date) = '{}' AND QUARTER(classes.date) = {} AND  enrollment.program = 'Ekukhuleni' AND classes.class_type = 'Saturdays' AND enrollment.end is NULL AND students.current_school = '{}' AND students.current_grade = {} GROUP BY students.student_id ORDER BY students.lastname;".format(year, term, school, grade), con=cn)
@@ -578,7 +578,7 @@ class w_PDF(FPDF):
     def chapter_body(self, school, grade, year, term):
 
         # Connect to server
-        cn = pymysql.connect(host='10.1.1.2', user='root', password='Start@123', db='axium')
+        cn = pymysql.connect(host='10.1.1.2', user='root', password='<insert>', db='axium')
 
         # Grab ekuk attendance
         ekuk_aten = pd.read_sql("SELECT students.student_id, classes.date, students.firstname, students.lastname, attendance.attended FROM attendance  JOIN enrollment ON attendance.student_id = enrollment.student_id  JOIN classes ON attendance.class_id = classes.class_id  JOIN students ON attendance.student_id = students.student_id  WHERE EXTRACT(YEAR FROM classes.date) = {} AND QUARTER(classes.date) = {} AND  enrollment.program = 'Ekukhuleni' AND classes.class_type = 'Saturdays'  AND enrollment.end is NULL AND students.current_school = '{}' AND students.current_grade = {} ORDER BY student_id, date;".format(year, term, school, grade), con=cn)
